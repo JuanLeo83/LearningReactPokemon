@@ -1,4 +1,4 @@
-import { getPokemonList, getSprite, getSpriteUrl } from "../../api/pokeApi.js";
+import { getPokemonList, getSpriteUrl } from "../../api/pokeApi.js";
 import { PokemonListError } from "../errors/PokemonListErrors";
 
 export async function getPokemonListUseCase(currentList) {
@@ -9,22 +9,6 @@ export async function getPokemonListUseCase(currentList) {
                 const sprite = getSpriteUrl(id)
                 return mapPokemonItem(pokemon, sprite)
             }))
-
-
-
-        // const promises = list
-        //     .map(element => getPokemonId(element.url) )
-        //     .map(pokemonId => getSprite(pokemonId))
-
-        // const result = await Promise.all(promises)
-        //     .then(sprites => {
-        //         let pokemons = []
-        //         for(let index = 0; index < sprites.length; index++) {
-        //             const pokemon = mapPokemonItem(list[index], sprites[index])
-        //             pokemons.push(pokemon)
-        //         }
-        //         return pokemons
-        //     })
 
         return [...currentList, ...list] ?? PokemonListError.EmptyList
     } catch (error) {

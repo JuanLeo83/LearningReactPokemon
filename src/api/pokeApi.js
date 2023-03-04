@@ -12,13 +12,6 @@ export function getPokemon(id) {
         .then(result => console.log(result))
 }
 
-export async function getSprite(id) {
-    const request = imageUrl + id + '.png'
-    return await fetch(request)
-        .then(response => response.blob())
-        .then(blob => URL.createObjectURL(blob))
-}
-
 export function getSpriteUrl(id) {
     return imageUrl + id + '.png'
 }
