@@ -5,7 +5,7 @@ export function PokemonListItem({ item }) {
         <Box key={item.name}>
             <Card onClick={() => { }}
                 direction={{ base: 'column', sm: 'row' }}
-                width={500}
+                width={520}
                 backgroundColor="orange.50"
             >
                 <Image
@@ -19,19 +19,18 @@ export function PokemonListItem({ item }) {
                     <CardBody width={400}>
                         <Stack divider={<StackDivider />} spacing='2'>
                             <Heading size='md'>{item.name}</Heading>
-                            <Text py='2'>Pokemon description coming soon</Text>
+                            <Text py='2' noOfLines={2}>{item.description}</Text>
                         </Stack>
                     </CardBody>
 
                     <CardFooter>
                         <Stack>
                             <HStack spacing={10}>
-                                <Text fontSize='xs' fontWeight='bold'>Weight: ---</Text>
-                                <Text fontSize='xs' fontWeight='bold'>Height: ---</Text>
+                                <Text fontSize='xs' fontWeight='bold'>Weight: {item.weight}</Text>
+                                <Text fontSize='xs' fontWeight='bold'>Height: {item.height}</Text>
                             </HStack>
                             <HStack>
-                                <Tag size='sm' variant='subtle' colorScheme='red'>Tag</Tag>
-                                <Tag size='sm' variant='subtle' colorScheme='red'>Tag</Tag>
+                                {item.types.map(type => <Tag key={item.name + '-' + type.name} size='sm' variant='subtle' colorScheme={type.color}>{type.name}</Tag>)}
                             </HStack>
                         </Stack>
                     </CardFooter>

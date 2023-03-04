@@ -7,13 +7,17 @@ export async function getPokemonList(offset) {
         .then(result => result.results)
 }
 
-export function getPokemon(id) {
-    doGetRequest('pokemon/' + id)
-        .then(result => console.log(result))
+export async function getPokemon(url) {
+    return await doSimpleRequest(url)
 }
 
-export function getSpriteUrl(id) {
-    return imageUrl + id + '.png'
+export async function getPokemonDescription(url) {
+    const result = await doSimpleRequest(url)
+    return result.flavor_text_entries[0].flavor_text
+}
+
+async function doSimpleRequest(url) {
+    return fetch(url).then(response => response.json())
 }
 
 async function doGetRequest(path = '', query = {}) {

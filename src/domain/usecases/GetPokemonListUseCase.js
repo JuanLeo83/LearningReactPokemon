@@ -1,31 +1,40 @@
-import { getPokemonList, getSpriteUrl } from "../../api/pokeApi.js";
+import { getPokemonList, getPokemon, getPokemonDescription } from "../../api/pokeApi.js";
 import { PokemonListError } from "../errors/PokemonListErrors";
+import { PokemonTypes } from "../model/PokemonTypes.js";
 
 export async function getPokemonListUseCase(currentList) {
     try {
         const list = await getPokemonList(currentList.length)
-            .then(result => result.map(pokemon => {
-                const id = getPokemonId(pokemon.url)
-                const sprite = getSpriteUrl(id)
-                return mapPokemonItem(pokemon, sprite)
-            }))
+        const promises = list.map(element => getPokemon(element.url) )
+        const info = await Promise.all(promises)
+            .then(result => result.map(pokemon => mapPokemonItem(pokemon)))
 
-        return [...currentList, ...list] ?? PokemonListError.EmptyList
+        const promisesForDescription = info.map(element => getPokemonDescription(element.description))
+        await Promise.all(promisesForDescription)
+            .then(result => {
+                for (let index = 0; index < result.length; index++) {
+                    info[index].description = result[index].replace(/[\n\f]/g, ' ')
+                }
+            })
+
+        return [...currentList, ...info] ?? PokemonListError.EmptyList
     } catch (error) {
         console.error(error)
         return PokemonListError.Unknown
     }
 }
 
-function getPokemonId(pokemonUrl) {
-    const chunks = pokemonUrl.split('/')
-    return chunks[chunks.length - 2]
-}
-
-function mapPokemonItem(pokemon, sprite) {
+function mapPokemonItem(pokemon) {
     return {
         name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
-        types: pokemon.types,
-        sprite: sprite
+        types: mapTypes(pokemon.types),
+        sprite: pokemon.sprites.front_default,
+        height: pokemon.height,
+        weight: pokemon.weight,
+        description: pokemon.species.url
     }
+}
+
+function mapTypes(types) {
+    return types.map(type => PokemonTypes.find(item => item.name == type.type.name))
 }
