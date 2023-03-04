@@ -1,4 +1,6 @@
+import { Button, Heading } from '@chakra-ui/react';
 import { useEffect } from "react";
+import { PokemonList } from "./components/PokemonList";
 import { PokemonListPresenter } from "./PokemonListPresenter";
 
 export function PokemonListScreen() {
@@ -10,26 +12,15 @@ export function PokemonListScreen() {
 
     return (
         <>
-            <h1>Pokemon List</h1>
+            <Heading as='h1' size='xl'>Pokemon List</Heading>
+
+            <Button onClick={() => { presenter.getPokemons() }}
+                isLoading={presenter.isLoading}
+                loadingText='Retrieving...'
+                colorScheme='blue'
+            >Get more Pokemons!</Button>
+
             <PokemonList items={presenter.pokemonList} />
-            <button onClick={() => { presenter.getPokemons() }}>Get more!</button>
         </>
-    )
-}
-
-function PokemonList({ items }) {
-    return (
-        <ul>
-            {items.map(item => <PokemonListItem key={item.name} item={item} />)}
-        </ul>
-    )
-}
-
-function PokemonListItem({ item }) {
-    return (
-        <li key={item.name}>
-            {item.name}
-            <img src={item.sprite} />
-        </li>
     )
 }

@@ -24,7 +24,8 @@ function getPokemonId(pokemonUrl) {
 
 function mapPokemonItem(pokemon, sprite) {
     return {
-        name: pokemon.name,
+        name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
+        types: pokemon.types,
         sprite: sprite
     }
 }

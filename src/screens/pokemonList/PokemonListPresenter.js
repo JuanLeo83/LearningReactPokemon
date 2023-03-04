@@ -3,9 +3,11 @@ import { getPokemonListUseCase } from "../../domain/usecases/GetPokemonListUseCa
 
 export const PokemonListPresenter = create((set, get) => ({
 	pokemonList: [],
+	isLoading: false,
 
 	getPokemons: async () => {
+		set({ isLoading: true })
 		const result = await getPokemonListUseCase(get().pokemonList)
-		set({ pokemonList: result })
+		set({ pokemonList: result, isLoading: false })
 	},
 }))
